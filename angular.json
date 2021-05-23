@@ -1,0 +1,48 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "ngx-onetrust": {
+      "projectType": "library",
+      "root": "projects/ngx-onetrust",
+      "sourceRoot": "projects/ngx-onetrust/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/ngx-onetrust/tsconfig.lib.json",
+            "project": "projects/ngx-onetrust/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-onetrust/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-onetrust/src/test.ts",
+            "tsConfig": "projects/ngx-onetrust/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-onetrust/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-onetrust/tsconfig.lib.json",
+              "projects/ngx-onetrust/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "ngx-onetrust"
+}
