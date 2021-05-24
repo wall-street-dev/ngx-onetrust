@@ -84,7 +84,7 @@ const _locales = {
   bn: {
     name: 'Bengali',
     code: 'bn',
-    locales: ['bn-BD', 'bn-IN']
+    locales: ['bn-IN', 'bn-BD']
   },
   bs: {
     name: 'Bosnian',
@@ -144,7 +144,7 @@ const _locales = {
   nl: {
     name: 'Dutch',
     code: 'nl',
-    locales: ['nl-NL', 'nl-AW', 'nl-BE']
+    locales: ['nl-NL', 'nl-BE', 'nl-AW']
   },
   dz: {
     name: 'Dzongkha (Bhutani)',
@@ -236,12 +236,12 @@ const _locales = {
   de: {
     name: 'German',
     code: 'de',
-    locales: ['de-AT', 'de-BE', 'de-CH', 'de-DE', 'de-LI', 'de-LU']
+    locales: ['de-DE', 'de-AT', 'de-BE', 'de-CH', 'de-LI', 'de-LU']
   },
   el: {
     name: 'Greek',
     code: 'el',
-    locales: ['el-CY', 'el-GR']
+    locales: ['el-GR', 'el-CY']
   },
   kl: {
     name: 'Kalaallisut',
@@ -311,7 +311,7 @@ const _locales = {
   it: {
     name: 'Italian',
     code: 'it',
-    locales: ['it-CH', 'it-IT']
+    locales: ['it-IT', 'it-CH']
   },
   ja: {
     name: 'Japanese',
@@ -643,7 +643,7 @@ const _locales = {
   to: {
     name: 'Tonga',
     code: 'to',
-    locales: ['to-TO', 'to-TO']
+    locales: ['to-TO']
   },
   ts: {
     name: 'Tsonga',
@@ -653,7 +653,7 @@ const _locales = {
   tr: {
     name: 'Turkish',
     code: 'tr',
-    locales: ['tr-CY', 'tr-TR']
+    locales: ['tr-TR', 'tr-CY']
   },
   tk: {
     name: 'Turkmen',
@@ -698,7 +698,7 @@ const _locales = {
   fy: {
     name: 'Western Frisian',
     code: 'fy',
-    locales: ['fy-DE', 'fy-NL']
+    locales: ['fy-NL', 'fy-DE']
   },
   xh: {
     name: 'Xhosa',

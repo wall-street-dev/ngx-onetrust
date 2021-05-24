@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import { ONE_TRUST_CONFIGURATION } from '../one-trust-configuration.token';
-import {ConsentEvent, CookiesGroups, Locales, OneTrust, OneTrustConfig} from '../types';
+import { ConsentEvent, CookiesGroups, Locales, OneTrust, OneTrustConfig } from '../types';
 import { loadOneTrust, OneTrust$ } from '../util/helpers';
 import { locales } from '../util/locales';
-import { distinctUntilChanged, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, map, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { fromEventPattern, Observable, of, Subject } from 'rxjs';
 import { NodeEventHandler } from 'rxjs/internal/observable/fromEvent';
 
@@ -34,19 +34,18 @@ export class OneTrustService {
         oneTrust.changeLanguage(langAlpha2);
         return;
       }
+      // Try with the selected language
+      oneTrust.changeLanguage(langAlpha2);
       if (locales.has(langAlpha2)) {
+        const lang: Locales = locales.get(langAlpha2) as Locales;
+        // Try with the most common locale (the first in the array)
+        oneTrust.changeLanguage(lang.locales[0]);
         const geolocation = oneTrust.getGeolocationData();
         if (geolocation && geolocation.country) {
           const targetLocale = `${langAlpha2}-${geolocation.country}`;
-          // locales.get() will never be undefined, we just validated it with the locales.has()
-          const lang: Locales = locales.get(langAlpha2) as Locales;
+          // Try with an accurate locale based on the desired language + user location
           if (lang.locales.includes(targetLocale)) {
             oneTrust.changeLanguage(targetLocale);
-          } else {
-            oneTrust.changeLanguage(langAlpha2);
-            console.warn(
-              `Locale: ${targetLocale} is not recognized, generic ${langAlpha2.toUpperCase()} has been used instead`
-            );
           }
         }
       } else {
@@ -61,17 +60,13 @@ export class OneTrustService {
 
   consentChanged$(): Observable<Map<CookiesGroups, boolean>> {
     return OneTrust$.pipe(
-      switchMap((oneTrust: OneTrust) => {
-        return oneTrust.IsAlertBoxClosed()
-          ? of(this.oneTrustActiveGroups())
-          : this.fromConsentChanged(oneTrust).pipe(startWith(this.oneTrustActiveGroups()));
-      }),
-      map((groups: Array<string>) => this.cookiesPermissionMap(groups)),
-      distinctUntilChanged(
-        (prev: Map<CookiesGroups, boolean>, next: Map<CookiesGroups, boolean>) => {
-          return this.areMapsEquals(prev, next);
-        }
-      )
+        switchMap((oneTrust: OneTrust) => this.fromConsentChanged(oneTrust)),
+        map((groups: Array<string>) => this.cookiesPermissionMap(groups)),
+        distinctUntilChanged(
+            (prev: Map<CookiesGroups, boolean>, next: Map<CookiesGroups, boolean>) => {
+              return this.areMapsEquals(prev, next);
+            }
+        )
     );
   }
 
@@ -85,7 +80,10 @@ export class OneTrustService {
         fromEventPattern(
             (handler: NodeEventHandler) => oneTrustInstance.OnConsentChanged(handler) as ConsentEvent
         ) as Observable<ConsentEvent>
-    ).pipe(map((event: ConsentEvent) => event.detail));
+    ).pipe(
+        map((event: ConsentEvent) => event.detail),
+        startWith(this.oneTrustActiveGroups())
+    );
   }
 
   private cookiesPermissionMap(foundCookies: Array<string>): Map<CookiesGroups, boolean> {
@@ -101,7 +99,10 @@ export class OneTrustService {
     return cookiesGroups;
   }
 
-  private areMapsEquals(prev: Map<CookiesGroups, boolean>, next: Map<CookiesGroups, boolean>): boolean {
+  private areMapsEquals(
+      prev: Map<CookiesGroups, boolean>,
+      next: Map<CookiesGroups, boolean>
+  ): boolean {
     // different sizes means something changed
     if (prev.size !== next.size) {
       return false;

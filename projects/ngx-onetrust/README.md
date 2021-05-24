@@ -32,7 +32,7 @@ Let's have a look these 3 method in detail.
     - `oneTrustService.loadOneTrust()` accepts an optional parameter with your `domainScriptID` which will take over the one defined at the module level.
     Calling this method will init the download and initialization of the OneTrust script.
     
-    - `oneTrustService.translateBanner(lang)` will try to translate the cookie banner using a the lang parameter (e.g `en`, `es`, `pl`, etc.). 
+    - `oneTrustService.translateBanner(lang)` will try to translate the cookie banner using the lang parameter (e.g `en`, `es`, `pl`, etc.). 
     It works by calling the `OneTrust.changeLanguage()` method from the OneTrust object of the browser. In order for this to work, you'll have to define the translation in the OneTrust administration panel (usually in the Templates section).
     Based on the country the user is, `translateBanner()` will attempt to identify the most accurate user locale and pass it to the `OneTrust.changeLanguage()` Here are some examples:  
     Suppose the user is in Mexico and the user wants to display the banner in Spanish, you call `oneTrustService.translateBanner('es')` then `OneTrust.changeLanguage()` will be called with `es-MX`, this will be possible because Spanish is available in Mexico (it's the official language).  
