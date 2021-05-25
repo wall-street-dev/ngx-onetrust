@@ -1,10 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import { ONE_TRUST_CONFIGURATION } from '../one-trust-configuration.token';
-import { ConsentEvent, CookiesGroups, Locales, OneTrust, OneTrustConfig } from '../types';
+import { ConsentEvent, CookiesGroups, OneTrust, OneTrustConfig } from '../types';
 import { loadOneTrust, OneTrust$ } from '../util/helpers';
-import { locales } from '../util/locales';
-import { distinctUntilChanged, map, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { fromEventPattern, Observable, of, Subject } from 'rxjs';
+import {distinctUntilChanged, map, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import { fromEventPattern, Observable, Subject } from 'rxjs';
 import { NodeEventHandler } from 'rxjs/internal/observable/fromEvent';
 
 @Injectable()
@@ -25,32 +24,23 @@ export class OneTrustService {
   translateBanner(langAlpha2: string, force?: boolean): void {
     this.cancelPrev$.next();
     OneTrust$.pipe(takeUntil(this.cancelPrev$)).subscribe((oneTrust: OneTrust) => {
-      // No point to translate the Banner if it's already closed
-      if (oneTrust.IsAlertBoxClosed()) {
-        return;
-      }
       langAlpha2 = langAlpha2.toLowerCase();
-      if (force) {
+      if (force || langAlpha2.length > 2) {
         oneTrust.changeLanguage(langAlpha2);
         return;
       }
-      // Try with the selected language
-      oneTrust.changeLanguage(langAlpha2);
-      if (locales.has(langAlpha2)) {
-        const lang: Locales = locales.get(langAlpha2) as Locales;
-        // Try with the most common locale (the first in the array)
-        oneTrust.changeLanguage(lang.locales[0]);
-        const geolocation = oneTrust.getGeolocationData();
-        if (geolocation && geolocation.country) {
-          const targetLocale = `${langAlpha2}-${geolocation.country}`;
-          // Try with an accurate locale based on the desired language + user location
-          if (lang.locales.includes(targetLocale)) {
-            oneTrust.changeLanguage(targetLocale);
-          }
-        }
-      } else {
-        console.warn(`Language: ${langAlpha2.toUpperCase()} is not valid`);
+      // builds a valid xx-YY in order to try to translate the banner using the resulting locale (e.g en-US)
+      const geolocation = oneTrust.getGeolocationData();
+      if (geolocation && geolocation.country) {
+        const targetLocale = `${langAlpha2}-${geolocation.country}`;
+        oneTrust.changeLanguage(targetLocale);
       }
+    });
+  }
+
+  togglePreferenceCenter(): void {
+    OneTrust$.pipe(take(1)).subscribe((oneTrust: OneTrust) => {
+      oneTrust.ToggleInfoDisplay();
     });
   }
 

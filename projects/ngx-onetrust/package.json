@@ -1,6 +1,6 @@
 {
   "name": "@altack/ngx-onetrust",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "OneTrust loader & wrapper for Angular 8+",
   "keywords": [
     "OneTrust",

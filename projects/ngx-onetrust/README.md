@@ -34,13 +34,8 @@ Let's have a look these 3 method in detail.
     
     - `oneTrustService.translateBanner(lang)` will try to translate the cookie banner using the lang parameter (e.g `en`, `es`, `pl`, etc.). 
     It works by calling the `OneTrust.changeLanguage()` method from the OneTrust object of the browser. In order for this to work, you'll have to define the translation in the OneTrust administration panel (usually in the Templates section).
-    Based on the country the user is, `translateBanner()` will attempt to identify the most accurate user locale and pass it to the `OneTrust.changeLanguage()` Here are some examples:  
-    Suppose the user is in Mexico and the user wants to display the banner in Spanish, you call `oneTrustService.translateBanner('es')` then `OneTrust.changeLanguage()` will be called with `es-MX`, this will be possible because Spanish is available in Mexico (it's the official language).  
-    User is in Spain, and he wants to display the banner in English, you call `oneTrustService.translateBanner('en')`. As English is not an official language of Spain, `OneTrust.changeLanguage()` will be called with `en`.  
-    User is in Poland, and he wants to display the banner in Polish, you call `oneTrustService.translateBanner('pl')`. As Polish is the official language of Poland, `OneTrust.changeLanguage()` will be called with `pl-PL`.  
-    User is in Poland, and he wants to display the banner in English, you call `oneTrustService.translateBanner('en')`. As English is not an official language in Poland, `OneTrust.changeLanguage()` will be called with `en`.  
-    Again, for the translations to work you must make it available for your banner template in OneTrust administration. You might want to have a look into `utils/locales.ts` for a better understanding of the relationship between languages and locales.
-    If you want to skip all the automated locales discovering and use the language you pass to `oneTrustService.translateBanner()` you can pass a second argument `true` to the `oneTrustService.translateBanner('en', true)`.
+    Based on the country the user is, `translateBanner()` will attempt to create a valid locale (e.g en-US) by combining the language + the country.
+    You can also pass a second argument `true` to the `oneTrustService.translateBanner('en', true)` in order to force a language change without trying to build the locale.
 
     - `oneTrustService.consentChanged$()` returns an `Observable<Map<CookiesGroups, boolean>>`. Basically a Map with the permission the user has consent. Useful for running certain logic based on the user selection. Heads up, by default (while the cookie banner is visible and pristine) this `Map` will contain only `StrictlyNecessaryCookies` permission.
 
