@@ -9,6 +9,7 @@ export enum CookiesGroups {
 export interface OneTrustConfig {
   cookiesGroups: { [key in CookiesGroups]: string };
   domainScript?: string;
+  documentBasedLanguage?: boolean;
 }
 
 export interface OneTrust {
@@ -34,7 +35,13 @@ export interface OneTrust {
   useGeoLocationService: boolean;
 }
 
-export interface Locales {
+export interface LanguageLocales {
+  name: string;
+  code: string;
+  locales: Array<string>;
+}
+
+export interface CountriesLocales {
   name: string;
   code: string;
   locales: Array<string>;

@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
 import { ONE_TRUST_CONFIGURATION } from '../one-trust-configuration.token';
-import { ConsentEvent, CookiesGroups, OneTrust, OneTrustConfig } from '../types';
+import { ConsentEvent, CookiesGroups, CountriesLocales, OneTrust, OneTrustConfig } from '../types';
 import { loadOneTrust, OneTrust$ } from '../util/helpers';
-import {distinctUntilChanged, map, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import { distinctUntilChanged, map, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
 import { fromEventPattern, Observable, Subject } from 'rxjs';
 import { NodeEventHandler } from 'rxjs/internal/observable/fromEvent';
+import { countries } from '../util/countries';
 
 @Injectable()
 export class OneTrustService {
@@ -17,7 +18,10 @@ export class OneTrustService {
       console.warn('OneTrust already loaded!');
       return;
     }
-    loadOneTrust(domainScript || this.config.domainScript || '');
+    loadOneTrust(domainScript || this.config.domainScript || '', this.config.documentBasedLanguage);
+    if (!this.config.documentBasedLanguage) {
+      this.autoTranslate();
+    }
     this.scriptsLoaded = true;
   }
 
@@ -38,12 +42,6 @@ export class OneTrustService {
     });
   }
 
-  togglePreferenceCenter(): void {
-    OneTrust$.pipe(take(1)).subscribe((oneTrust: OneTrust) => {
-      oneTrust.ToggleInfoDisplay();
-    });
-  }
-
   oneTrustInstance$(): Observable<OneTrust> {
     return OneTrust$;
   }
@@ -58,6 +56,21 @@ export class OneTrustService {
             }
         )
     );
+  }
+
+  private autoTranslate(): void {
+    OneTrust$.pipe(take(1)).subscribe((oneTrust: OneTrust) => {
+      const geolocation = oneTrust.getGeolocationData();
+      if (geolocation && geolocation.country) {
+        if (countries.has(geolocation.country.toLowerCase())) {
+          const countriesLocales = countries.get(geolocation.country.toLowerCase()) as CountriesLocales;
+          if (countriesLocales.locales && countriesLocales.locales.length > 0) {
+            // apply default locale for the current country
+            oneTrust.changeLanguage(countriesLocales.locales[0]);
+          }
+        }
+      }
+    });
   }
 
   private oneTrustActiveGroups(): Array<string> {

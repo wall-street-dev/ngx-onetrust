@@ -37,6 +37,7 @@ const OneTrustReady$ = (): Observable<OneTrust> => {
 
 export function loadOneTrust(
   domainScript: string,
+  documentLanguage?: boolean,
   src: string = 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.js'
 ): void {
   // Get ready to receive the OneTrust object once loaded
@@ -50,7 +51,9 @@ export function loadOneTrust(
   const oneTrustScript = window.document.createElement('script');
   oneTrustScript.id = 'one-trust-script';
   oneTrustScript.src = src;
-  oneTrustScript.setAttribute('data-document-language', 'true');
+  if (documentLanguage) {
+    oneTrustScript.setAttribute('data-document-language', 'true');
+  }
   oneTrustScript.setAttribute('type', 'text/javascript');
   oneTrustScript.setAttribute('charset', 'UTF-8');
   oneTrustScript.setAttribute('data-domain-script', domainScript);
