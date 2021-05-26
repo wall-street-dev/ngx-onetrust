@@ -9,6 +9,7 @@ export enum CookiesGroups {
 export interface OneTrustConfig {
   cookiesGroups: { [key in CookiesGroups]: string };
   domainScript?: string;
+  defaultCountry?: string;
   documentBasedLanguage?: boolean;
 }
 
@@ -30,9 +31,14 @@ export interface OneTrust {
   ToggleInfoDisplay: () => {};
   changeLanguage: (lang: string) => {};
   getDataSubjectId: () => {};
-  getGeolocationData: () => { country: string };
+  getGeolocationData: () => GeoLocationData;
   setGeoLocation: (e: any, t: any) => {};
   useGeoLocationService: boolean;
+}
+
+export interface GeoLocationData {
+  country: string;
+  state: string;
 }
 
 export interface LanguageLocales {
