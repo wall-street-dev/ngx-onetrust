@@ -1,5 +1,5 @@
 ## OneTrust for Angular
-OneTrust loader & wrapper for Angular 8+
+OneTrust loader & wrapper for Angular
 
 #### How to use?
 1. Install the package  
@@ -75,3 +75,6 @@ export class MyInitService {
   }
 }
 ```
+  
+#### Angular Compatibility
+If you're using Angular 13 make sure to use 1.3.x versions
