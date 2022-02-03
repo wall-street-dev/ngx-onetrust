@@ -29,10 +29,16 @@ const MutationObserver$ = (
 const OneTrustReady$ = (): Observable<OneTrust> => {
   return MutationObserver$(document.body).pipe(
     filter((record: MutationRecord) => record.addedNodes.length === 1),
-    map((record: MutationRecord) => record.addedNodes.item(0) as Node),
-    filter((element: Node) => (element as HTMLElement).getAttribute('id') === 'onetrust-consent-sdk'),
+    map((record: MutationRecord) => record.addedNodes.item(0) as HTMLElement),
+    filter((element: HTMLElement) => {
+      return (
+          element &&
+          typeof element.getAttribute === 'function' &&
+          element.getAttribute('id') === 'onetrust-consent-sdk'
+      );
+    }),
     debounceTime(300),
-    // tslint:disable:no-string-literal
+    // tslint:disable-next-line:no-string-literal
     map(() => window['OneTrust'] as OneTrust)
   );
 };
@@ -91,6 +97,7 @@ export function loadOneTrust(
   } else {
     // tslint:disable-next-line:variable-name
     let __geoLocationData: GeoLocationData;
+    // tslint:disable-next-line:no-string-literal
     window['jsonFeed'] = (location: GeoLocationData) => {
       __geoLocationData = location;
     };
