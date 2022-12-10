@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { ONE_TRUST_CONFIGURATION } from '../one-trust-configuration.token';
-import { ConsentEvent, CookiesGroups, CountriesLocales, OneTrust, OneTrustConfig } from '../types';
+import { ConsentEvent, CookiesGroups, OneTrust, OneTrustConfig } from '../types';
 import {appliedLocale$, loadOneTrust, OneTrust$} from '../util/helpers';
 import { distinctUntilChanged, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { fromEventPattern, Observable, Subject } from 'rxjs';
@@ -9,7 +9,7 @@ import { NodeEventHandler } from 'rxjs/internal/observable/fromEvent';
 @Injectable()
 export class OneTrustService {
   private scriptsLoaded = false;
-  private cancelPrev$ = new Subject();
+  private readonly cancelPrev$ = new Subject<void>();
   constructor(@Inject(ONE_TRUST_CONFIGURATION) public config: OneTrustConfig) {}
 
   loadOneTrust(domainScript?: string): void {
