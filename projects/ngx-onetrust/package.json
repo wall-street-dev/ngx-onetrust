@@ -1,6 +1,6 @@
 {
   "name": "@altack/ngx-onetrust",
-  "version": "1.3.1",
+  "version": "1.5.0",
   "license": "MIT",
   "description": "OneTrust loader & wrapper for Angular",
   "keywords": [
@@ -12,9 +12,8 @@
     "url": "https://github.com/guzmanoj/ngx-onetrust"
   },
   "peerDependencies": {
-    "@angular/common": "^13.2.0",
-    "@angular/core": "^13.2.0",
-    "rxjs": "^6.6.0"
+    "@angular/common": "^15.0.0",
+    "@angular/core": "^15.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

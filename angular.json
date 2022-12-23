@@ -27,13 +27,14 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ngx-onetrust/src/test.ts",
             "tsConfig": "projects/ngx-onetrust/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-onetrust/karma.conf.js"
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
     }
-  },
-  "defaultProject": "ngx-onetrust"
+  }
 }

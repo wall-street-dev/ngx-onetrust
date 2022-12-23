@@ -49,7 +49,6 @@ export interface LanguageLocales {
 
 export interface CountriesLocales {
   name: string;
-  code: string;
   locales: Array<string>;
 }
 

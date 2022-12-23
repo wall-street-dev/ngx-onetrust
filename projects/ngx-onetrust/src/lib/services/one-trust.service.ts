@@ -9,7 +9,7 @@ import { NodeEventHandler } from 'rxjs/internal/observable/fromEvent';
 @Injectable()
 export class OneTrustService {
   private scriptsLoaded = false;
-  private cancelPrev$ = new Subject();
+  private cancelPrev$ = new Subject<void>();
   constructor(@Inject(ONE_TRUST_CONFIGURATION) public config: OneTrustConfig) {}
 
   loadOneTrust(domainScript?: string): void {
