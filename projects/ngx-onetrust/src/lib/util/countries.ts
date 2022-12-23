@@ -6,7 +6,7 @@ import { CountriesLocales } from '../types';
  * */
 
 // tslint:disable-next-line:variable-name
-const _countries = {
+const _countries: { [key: string]: CountriesLocales } = {
     af: {name: 'Afghanistan', locales: ['ps-AF', 'fa-AF']},
     al: {name: 'Albania', locales: ['sq-AL']},
     dz: {name: 'Algeria', locales: ['ar-DZ']},
