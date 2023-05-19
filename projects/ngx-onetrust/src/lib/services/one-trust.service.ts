@@ -9,7 +9,8 @@ import { NodeEventHandler } from 'rxjs/internal/observable/fromEvent';
 @Injectable()
 export class OneTrustService {
   private scriptsLoaded = false;
-  private cancelPrev$ = new Subject<void>();
+  private cancelPrevShowPreferences$ = new Subject<void>();
+  private cancelPrevTranslateBanner$ = new Subject<void>();
   constructor(@Inject(ONE_TRUST_CONFIGURATION) public config: OneTrustConfig) {}
 
   loadOneTrust(domainScript?: string): void {
@@ -23,8 +24,8 @@ export class OneTrustService {
   }
 
   translateBanner(langAlpha2: string, force?: boolean): void {
-    this.cancelPrev$.next();
-    OneTrust$.pipe(takeUntil(this.cancelPrev$)).subscribe((oneTrust: OneTrust) => {
+    this.cancelPrevTranslateBanner$.next();
+    OneTrust$.pipe(takeUntil(this.cancelPrevTranslateBanner$)).subscribe((oneTrust: OneTrust) => {
       langAlpha2 = langAlpha2.toLowerCase();
       if (force || langAlpha2.length > 2) {
         if (appliedLocale$.getValue() !== langAlpha2) {
@@ -43,6 +44,15 @@ export class OneTrustService {
         }
       }
     });
+  }
+
+  showPreferences() {
+    this.cancelPrevShowPreferences$.next();
+    OneTrust$.pipe(takeUntil(this.cancelPrevShowPreferences$)).subscribe(
+      oneTrust => {
+        oneTrust.ToggleInfoDisplay();
+      }
+    );
   }
 
   oneTrustInstance$(): Observable<OneTrust> {

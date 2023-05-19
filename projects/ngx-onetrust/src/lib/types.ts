@@ -28,7 +28,7 @@ export interface OneTrust {
   ReconsentGroups: () => {};
   RejectAll: (e: any) => {};
   SetAlertBoxClosed: (e: any) => {};
-  ToggleInfoDisplay: () => {};
+  ToggleInfoDisplay: () => void;
   changeLanguage: (lang: string) => {};
   getDataSubjectId: () => {};
   getGeolocationData: () => GeoLocationData;
