@@ -9,6 +9,7 @@ import { NodeEventHandler } from 'rxjs/internal/observable/fromEvent';
 @Injectable()
 export class OneTrustService {
   private scriptsLoaded = false;
+  private cancelPrevShowPreferences$ = new Subject<void>();
   private cancelPrevTranslateBanner$ = new Subject<void>();
   constructor(@Inject(ONE_TRUST_CONFIGURATION) public config: OneTrustConfig) {}
 
@@ -43,6 +44,15 @@ export class OneTrustService {
         }
       }
     });
+  }
+
+  showPreferences() {
+    this.cancelPrevShowPreferences$.next();
+    OneTrust$.pipe(takeUntil(this.cancelPrevShowPreferences$)).subscribe(
+      oneTrust => {
+        oneTrust.ToggleInfoDisplay();
+      }
+    );
   }
 
   oneTrustInstance$(): Observable<OneTrust> {
