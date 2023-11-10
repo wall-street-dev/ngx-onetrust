@@ -77,4 +77,4 @@ export class MyInitService {
 ```
 
 #### Angular Compatibility
-If you're using Angular 15 make sure to use 1.5.x versions
+If you're using Angular 16 make sure to use 1.6.x versions

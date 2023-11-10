@@ -39,6 +39,7 @@ const OneTrustReady$ = (): Observable<OneTrust> => {
     }),
     debounceTime(300),
     // tslint:disable-next-line:no-string-literal
+    // @ts-ignore
     map(() => window['OneTrust'] as OneTrust)
   );
 };
@@ -98,6 +99,7 @@ export function loadOneTrust(
     // tslint:disable-next-line:variable-name
     let __geoLocationData: GeoLocationData;
     // tslint:disable-next-line:no-string-literal
+    // @ts-ignore
     window['jsonFeed'] = (location: GeoLocationData) => {
       __geoLocationData = location;
     };
