@@ -63,6 +63,7 @@ export class OneTrustService {
 
   private oneTrustActiveGroups(): Array<string> {
     // tslint:disable:no-string-literal
+    // @ts-ignore
     return (window['OnetrustActiveGroups'] as string).split(',').filter(Boolean);
   }
 
